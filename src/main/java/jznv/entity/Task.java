@@ -19,6 +19,7 @@ public class Task {
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
+    private String type;
     private Integer maxScore;
 
     @ManyToOne
@@ -26,5 +27,10 @@ public class Task {
     private Theme theme;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<StudentThemeStat> stats = new ArrayList<>();
+    private List<StudentTaskStat> stats = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return theme.getName() + " > " + type + " > " + name;
+    }
 }

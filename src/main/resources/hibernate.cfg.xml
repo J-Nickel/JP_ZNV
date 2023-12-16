@@ -19,6 +19,6 @@
         <mapping class="jznv.entity.Student"/>
         <mapping class="jznv.entity.Task"/>
         <mapping class="jznv.entity.Theme"/>
-        <mapping class="jznv.entity.StudentThemeStat"/>
+        <mapping class="jznv.entity.StudentTaskStat"/>
     </session-factory>
 </hibernate-configuration>

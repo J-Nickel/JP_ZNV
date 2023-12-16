@@ -15,16 +15,22 @@ import java.util.List;
 @Table(name = "students")
 public class Student {
     @Id
-    private Long ulearnId;
+    private String ulearnId;
     private String firstname;
     private String lastname;
     private String email;
     private String learnGroup;
+
     private String birthDate;
     private String city;
     private String country;
     private String gender;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentThemeStat> stats = new ArrayList<>();
+    private List<StudentTaskStat> stats = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return ulearnId + "\t" + firstname + "\t" + lastname + "\t" + email + "\t" + learnGroup;
+    }
 }

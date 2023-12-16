@@ -1,26 +1,35 @@
 package jznv;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import jznv.entity.Student;
+import jznv.io.XLSXParser;
+
+import java.io.File;
+import java.io.IOException;
 
 public class App {
-    public static void main(String[] args) {
-        Configuration cfg = new Configuration();
-        cfg.configure();
+    public static void main(String[] args) throws IOException {
+//        Configuration cfg = new Configuration();
+//        cfg.configure();
+//
+//        try {
+//            SessionFactory factory = cfg.buildSessionFactory();
+//            Session session = factory.openSession();
+//
+//            session.beginTransaction();
+//
+//            session.getTransaction().commit();
+//
+//            session.close();
+//            factory.close();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
-        try {
-            SessionFactory factory = cfg.buildSessionFactory();
-            Session session = factory.openSession();
+        XLSXParser parser = new XLSXParser(new File("table.xlsx"));
 
-            session.beginTransaction();
-
-            session.getTransaction().commit();
-
-            session.close();
-            factory.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        for (Student student : parser.getStudents()) {
+            System.out.println(student);
         }
+
     }
 }
