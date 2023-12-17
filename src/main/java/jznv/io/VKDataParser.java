@@ -3,6 +3,7 @@ package jznv.io;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import jznv.data.NamePair;
 import jznv.entity.StudentInfo;
 import lombok.Getter;
 

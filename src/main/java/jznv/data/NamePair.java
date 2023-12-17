@@ -1,4 +1,4 @@
-package jznv.io;
+package jznv.data;
 
 import java.util.Objects;
 

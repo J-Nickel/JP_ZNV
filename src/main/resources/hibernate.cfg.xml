@@ -11,11 +11,9 @@
         <property name="hibernate.connection.password">1425</property>
 
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-        <!--        <property name="hibernate.show_sql">true</property>-->
-        <!--        <property name="hibernate.format_sql">true</property>-->
+        <property name="hbm2ddl.auto">update</property>
 
-        <property name="hbm2ddl.auto">create</property>
-<!--                <property name="hbm2ddl.auto">update</property>-->
+        <property name="hibernate.jdbc.batch_size">75</property>
 
         <mapping class="jznv.entity.Student"/>
         <mapping class="jznv.entity.Task"/>

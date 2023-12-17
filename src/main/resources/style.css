@@ -1,0 +1,44 @@
+.toggle-pane {
+    -fx-background-color: #303030;
+    -fx-border-color: #a0a0a0;
+    -fx-border-width: 0 0 0 1;
+}
+
+.plot-type-pane {
+    -fx-background-color: #303030;
+    -fx-border-color: #a0a0a0;
+    -fx-border-width: 1 0 0 1;
+}
+
+.bg {
+    -fx-background-color: #363636;
+}
+
+.bg-light {
+    -fx-background-color: #e0e0e0;
+}
+
+.bg-dark {
+    -fx-background-color: #303030;
+}
+
+.flat-btn {
+    -fx-text-fill: #f0f0f0;
+    -fx-background-color: #303030;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.flat-btn:hover {
+    -fx-background-color: #2f2f2f;
+}
+
+.flat-btn:pressed {
+    -fx-background-color: #2a2a2a;
+}
+
+.flat-btn:selected {
+    -fx-background-color: #404040;
+    -fx-text-fill: #ff8800;
+}

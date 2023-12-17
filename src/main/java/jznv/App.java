@@ -1,12 +1,12 @@
 package jznv;
 
 import jznv.entity.*;
-import jznv.io.NamePair;
+import jznv.data.NamePair;
 import jznv.io.Props;
 import jznv.io.VKDataParser;
 import jznv.io.XLSXParser;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.cfg.Configuration;
 
 import java.io.File;
@@ -49,13 +49,14 @@ public class App {
         t = System.currentTimeMillis();
         Configuration cfg = new Configuration().configure();
         SessionFactory factory = cfg.buildSessionFactory();
-        Session session = factory.openSession();
+        StatelessSession session = factory.openStatelessSession();
         session.beginTransaction();
 
-        for (Student student : xlsx.getStudents()) session.save(student);
-        for (Theme theme : xlsx.getThemes()) session.save(theme);
-        for (Task task : xlsx.getTasks()) session.save(task);
-        for (StudentStat stat : xlsx.getStats()) session.save(stat);
+        for (StudentInfo info : infos) session.insert(info);
+        for (Student student : xlsx.getStudents()) session.insert(student);
+        for (Theme theme : xlsx.getThemes()) session.insert(theme);
+        for (Task task : xlsx.getTasks()) session.insert(task);
+        for (StudentStat stat : xlsx.getStats()) session.insert(stat);
 
         session.getTransaction().commit();
         session.close();
