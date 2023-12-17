@@ -27,7 +27,7 @@ public class Task {
     private Theme theme;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<StudentTaskStat> stats = new ArrayList<>();
+    private List<StudentStat> stats = new ArrayList<>();
 
     @Override
     public String toString() {

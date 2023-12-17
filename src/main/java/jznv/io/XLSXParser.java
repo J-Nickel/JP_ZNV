@@ -1,7 +1,7 @@
 package jznv.io;
 
 import jznv.entity.Student;
-import jznv.entity.StudentTaskStat;
+import jznv.entity.StudentStat;
 import jznv.entity.Task;
 import jznv.entity.Theme;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class XLSXParser {
     @Getter
     private final List<Student> students = new ArrayList<>();
     @Getter
-    private final List<StudentTaskStat> stats = new ArrayList<>();
+    private final List<StudentStat> stats = new ArrayList<>();
 
     private final Map<Integer, Task> taskMap = new HashMap<>();
 
@@ -81,8 +81,8 @@ public class XLSXParser {
             Row row = sheet.getRow(i);
             String[] nameParts = student_parseName(row.getCell(0));
             students.add(Student.builder()
-                    .firstname(nameParts[1])
-                    .lastname(nameParts[0])
+                    .firstname(nameParts[0])
+                    .lastname(nameParts[1])
                     .ulearnId(row.getCell(1).getStringCellValue())
                     .email(row.getCell(2).getStringCellValue())
                     .learnGroup(getOrDef(row.getCell(3)))
@@ -97,7 +97,7 @@ public class XLSXParser {
         for (int y = 3; y <= lri; y++) {
             for (int x = 12; x <= lci; x++) {
                 if (!taskMap.containsKey(x)) continue;
-                stats.add(StudentTaskStat
+                stats.add(StudentStat
                         .builder()
                         .score((int) sheet.getRow(y).getCell(x).getNumericCellValue())
                         .student(students.get(y - 3))

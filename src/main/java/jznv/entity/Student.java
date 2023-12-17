@@ -21,13 +21,12 @@ public class Student {
     private String email;
     private String learnGroup;
 
-    private String birthDate;
-    private String city;
-    private String country;
-    private String gender;
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentTaskStat> stats = new ArrayList<>();
+    private List<StudentStat> stats = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "info_id")
+    private StudentInfo info;
 
     @Override
     public String toString() {
