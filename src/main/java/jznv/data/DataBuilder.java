@@ -16,6 +16,9 @@ public class DataBuilder {
     private DataSet city;
     private DataSet group;
     private DataSet themeAvg;
+    private DataSet theme_t5 = null;
+    private DataSet theme_t10 = null;
+    private DataSet theme_t15 = null;
 
     public DataBuilder(SessionFactory factory) {
         this.factory = factory;
@@ -29,6 +32,9 @@ public class DataBuilder {
             case Gender -> getGender();
             case Group -> getGroup();
             case ThemeAVG -> getThemeAvg();
+            case TaskAVG_T5 -> getThemeTaskStat(theme_t5, 0, DataType.TaskAVG_T5.getName());
+            case TaskAVG_T10 -> getThemeTaskStat(theme_t10, 5, DataType.TaskAVG_T10.getName());
+            case TaskAVG_T15 -> getThemeTaskStat(theme_t15, 10, DataType.TaskAVG_T15.getName());
         };
     }
 
@@ -158,6 +164,44 @@ public class DataBuilder {
         themeAvg = new DataSet(DataType.ThemeAVG.getName(), a);
         return themeAvg;
     }
+
+
+    public DataSet getThemeTaskStat(DataSet ds, int skip, String dsn) {
+        if (ds != null) return ds;
+        Session session = begin();
+
+        ds = new DataSet(dsn);
+
+        List<Theme> themes = session.createQuery("FROM Theme", Theme.class)
+                .setFirstResult(skip)
+                .setMaxResults(5)
+                .list();
+        for (Theme theme : themes) {
+            Data data = new Data(theme.getName());
+
+            String q = """
+                    SELECT t.name, AVG(ss.score), MAX(t.maxScore)
+                    FROM StudentStat ss
+                    JOIN ss.task t
+                    WHERE t.theme.name = :themeName
+                    GROUP BY t.name
+                    """;
+            List<Object[]> avgs = session.createQuery(q, Object[].class).setParameter("themeName", theme.getName()).list();
+            int i = 0;
+            for (Object[] objects : avgs) {
+                String name = i + "";
+                i += 1;
+                Double avg = (Double) objects[1];
+                Integer total = (Integer) objects[2];
+                data.add(name, avg / (total / 100d));
+            }
+
+            ds.add(data);
+        }
+        end(session);
+        return ds;
+    }
+
 
     private Session begin() {
         Session session = factory.openSession();
