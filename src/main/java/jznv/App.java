@@ -1,7 +1,8 @@
 package jznv;
 
-import jznv.entity.*;
 import jznv.data.NamePair;
+import jznv.entity.Student;
+import jznv.entity.StudentInfo;
 import jznv.io.Props;
 import jznv.io.VKDataParser;
 import jznv.io.XLSXParser;
@@ -17,20 +18,37 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException, URISyntaxException {
-
         long t = System.currentTimeMillis();
+
         VKDataParser vk = new VKDataParser();
         long t_vk = System.currentTimeMillis() - t;
-        System.out.println("VK: " + t_vk);
-
+        System.out.println("Parse VK: " + t_vk);
 
         t = System.currentTimeMillis();
         XLSXParser xlsx = new XLSXParser(new File(Props.cfg.getProperty("table.path")));
+        List<StudentInfo> infos = mergeInfoAndStudent(xlsx, vk);
         long t_xlsx = System.currentTimeMillis() - t;
-        System.out.println("Table: " + t_xlsx);
+        System.out.println("Parse XLSX: " + t_xlsx);
 
+
+        Configuration cfg = new Configuration().configure("hibernate-create.xml");
+        SessionFactory factory = cfg.buildSessionFactory();
+        StatelessSession session = factory.openStatelessSession();
+        session.beginTransaction();
 
         t = System.currentTimeMillis();
+        insertIntoDB(session, infos, xlsx.getStudents(), xlsx.getThemes(), xlsx.getTasks(), xlsx.getStats());
+        long t_insert = System.currentTimeMillis() - t;
+        System.out.println("Insert: " + t_insert);
+
+        System.out.println("Total: " + (t_vk + t_xlsx + t_insert));
+
+        session.getTransaction().commit();
+        session.close();
+        factory.close();
+    }
+
+    private static List<StudentInfo> mergeInfoAndStudent(XLSXParser xlsx, VKDataParser vk) {
         List<StudentInfo> infos = new ArrayList<>();
         for (Student student : xlsx.getStudents()) {
             NamePair pair = new NamePair(student.getFirstname(), student.getLastname());
@@ -42,28 +60,12 @@ public class App {
                 vk.getInfoMap().remove(pair);
             }
         }
-        long t_merge = System.currentTimeMillis() - t;
-        System.out.println("Merge: " + t_merge);
+        return infos;
+    }
 
-
-        t = System.currentTimeMillis();
-        Configuration cfg = new Configuration().configure();
-        SessionFactory factory = cfg.buildSessionFactory();
-        StatelessSession session = factory.openStatelessSession();
-        session.beginTransaction();
-
-        for (StudentInfo info : infos) session.insert(info);
-        for (Student student : xlsx.getStudents()) session.insert(student);
-        for (Theme theme : xlsx.getThemes()) session.insert(theme);
-        for (Task task : xlsx.getTasks()) session.insert(task);
-        for (StudentStat stat : xlsx.getStats()) session.insert(stat);
-
-        session.getTransaction().commit();
-        session.close();
-        factory.close();
-        long t_into = System.currentTimeMillis() - t;
-        System.out.println("Into DB: " + t_into);
-
-        System.out.println("TOTAL: " + (t_vk + t_xlsx + t_into + t_merge));
+    private static void insertIntoDB(StatelessSession session, List<?>... objectLists) {
+        for (List<?> list : objectLists)
+            for (Object o : list)
+                session.insert(o);
     }
 }

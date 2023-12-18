@@ -27,9 +27,4 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
     private StudentInfo info;
-
-    @Override
-    public String toString() {
-        return ulearnId + "\t" + firstname + "\t" + lastname + "\t" + email + "\t" + learnGroup;
-    }
 }

@@ -24,9 +24,4 @@ public class StudentStat {
     @ManyToOne()
     @JoinColumn(name = "task_id")
     private Task task;
-
-    @Override
-    public String toString() {
-        return student.getFirstname() + " " + student.getLastname() + " > " + task.getName() + " > " + score;
-    }
 }

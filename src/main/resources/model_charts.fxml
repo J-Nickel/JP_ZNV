@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jznv.gui.MainController">
+    <AnchorPane fx:id="chart_pane" prefHeight="200.0" prefWidth="200.0" styleClass="bg-light" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="0.0">
+      <children>
+         <GridPane alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+         </GridPane>
+      </children></AnchorPane>
+    <VBox fx:id="togglePane_type" alignment="TOP_CENTER" prefWidth="200.0" styleClass="toggle-pane" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <HBox alignment="CENTER" maxHeight="30.0" maxWidth="200.0" minHeight="30.0" minWidth="200.0" prefHeight="30.0" prefWidth="200.0" styleClass="plot-type-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <ToggleButton fx:id="type_pie" maxHeight="100.0" maxWidth="100.0" mnemonicParsing="false" onAction="#update" prefHeight="100.0" prefWidth="100.0" styleClass="flat-btn" text="Pie" />
+        <ToggleButton fx:id="type_bar" maxHeight="100.0" maxWidth="100.0" mnemonicParsing="false" onAction="#update" prefHeight="100.0" prefWidth="100.0" styleClass="flat-btn" text="Bar" />
+        <ToggleButton fx:id="type_line" maxHeight="100.0" maxWidth="100.0" mnemonicParsing="false" onAction="#update" prefHeight="100.0" prefWidth="100.0" styleClass="flat-btn" text="Line" />
+    </HBox>
+</AnchorPane>

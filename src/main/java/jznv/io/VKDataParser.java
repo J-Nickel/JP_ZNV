@@ -22,7 +22,8 @@ public class VKDataParser {
     }
 
     public void parse() throws URISyntaxException, IOException {
-        JsonObject json = new Gson().fromJson(getData(), JsonObject.class);
+        String resp_data = getData();
+        JsonObject json = new Gson().fromJson(resp_data, JsonObject.class);
         JsonObject response = json.getAsJsonObject("response");
         JsonArray items = response.getAsJsonArray("items");
 

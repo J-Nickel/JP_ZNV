@@ -24,9 +24,4 @@ public class StudentInfo {
 
     @OneToOne(mappedBy = "info")
     private Student student;
-
-    @Override
-    public String toString() {
-        return birthDate + "|" + city + "|" + country + "|" + gender + "|" + university_name;
-    }
 }

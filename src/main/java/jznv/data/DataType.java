@@ -1,15 +1,17 @@
 package jznv.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public enum DataType {
-    USE_VK("Use VK"),
-    GENDER("GenderState");
+    VK("Найдено в ВК"),
+    Gender("Распределение по полу"),
+    Age("Распределение по возрасту"),
+    City("Распределение по городам"),
+    Group("Распределение по группам"),
+    ThemeAVG("Степень прохождения тем");
 
     private final String name;
-
-    DataType(String name) {
-        this.name = name;
-    }
 }

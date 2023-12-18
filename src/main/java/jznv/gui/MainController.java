@@ -1,21 +1,25 @@
 package jznv.gui;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import jznv.data.ChartData;
-import jznv.data.ChartDataBuilder;
+import javafx.scene.layout.*;
+import jznv.data.Data;
+import jznv.data.DataBuilder;
+import jznv.data.DataSet;
 import jznv.data.DataType;
 import lombok.Setter;
 
+import java.util.List;
+
 public class MainController {
     @Setter
-    private ChartDataBuilder dataBuilder;
+    private DataBuilder dataBuilder;
 
     @FXML
     private ToggleButton type_pie;
@@ -55,8 +59,8 @@ public class MainController {
     }
 
     @FXML
-    private void update() {
-        ChartData data = dataBuilder.build(((ExtendedToggle) data_toggle.getSelectedToggle()).getType());
+    public void update() {
+        DataSet data = dataBuilder.get(((ExtendedToggle) data_toggle.getSelectedToggle()).getType());
         Toggle selected_toggle = chart_toggle.getSelectedToggle();
         if (selected_toggle.equals(type_pie))
             plot_pie(data);
@@ -66,30 +70,65 @@ public class MainController {
             plot_line(data);
     }
 
-    private void plot_pie(ChartData data) {
-        chart_pane.getChildren().clear();
-        PieChart chart = new PieChart(data.getAsPieData());
-        chart.setTitle(data.getTitle());
-        add_plot(chart);
+    private void plot_pie(DataSet dataSet) {
+        List<Data> data = dataSet.getData();
+        GridPane pane = new GridPane();
+        pane.getColumnConstraints().clear();
+        pane.getRowConstraints().clear();
+        int w = 0, h = 0;
+        switch (data.size()) {
+            case 1 -> w = h = 1;
+            case 2 -> {
+                w = 2;
+                h = 1;
+            }
+            case 3, 4 -> w = h = 2;
+            case 5, 6 -> {
+                w = 3;
+                h = 2;
+            }
+            case 7, 8, 9 -> w = h = 3;
+        }
+        for (int i = 0; i < h; i++) {
+            RowConstraints e = new RowConstraints();
+            e.setVgrow(javafx.scene.layout.Priority.ALWAYS);
+            pane.getRowConstraints().add(e);
+        }
+        for (int i = 0; i < w; i++) {
+            ColumnConstraints e = new ColumnConstraints();
+            e.setHgrow(javafx.scene.layout.Priority.ALWAYS);
+            pane.getColumnConstraints().add(e);
+        }
+
+        for (int i = 0; i < data.size(); i++) {
+            Data d = data.get(i);
+            chart_pane.getChildren().clear();
+            PieChart chart = new PieChart(d.getAsPieData());
+            chart.setTitle(d.getDataName());
+            GridPane.setHalignment(chart, HPos.CENTER);
+            GridPane.setValignment(chart, VPos.CENTER);
+            pane.add(chart, i % w, i / w);
+        }
+        add_plot(pane);
     }
 
-    private void plot_bar(ChartData data) {
+    private void plot_bar(DataSet data) {
         chart_pane.getChildren().clear();
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
-        chart.getData().add(data.getAsBarData());
-        chart.setTitle(data.getTitle());
+        for (Data d : data.getData()) chart.getData().add(d.getAsBarData());
+        chart.setTitle(data.getName());
         add_plot(chart);
     }
 
-    private void plot_line(ChartData data) {
+    private void plot_line(DataSet data) {
         chart_pane.getChildren().clear();
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
-        chart.getData().add(data.getAsBarData());
-        chart.setTitle(data.getTitle());
+        for (Data d : data.getData()) chart.getData().add(d.getAsBarData());
+        chart.setTitle(data.getName());
         add_plot(chart);
     }
 

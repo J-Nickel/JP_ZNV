@@ -65,7 +65,15 @@ public class XLSXParser {
 
     private Theme parseAndGetTheme(Sheet sheet, int x) {
         String themeName;
-        while (sheet.getRow(0).getCell(x).getCellType() == CellType._NONE) x--;
+        while (x > 0) {
+            Cell cell = sheet.getRow(0).getCell(x);
+            if (cell.getCellType() == CellType.STRING) {
+                if (!cell.getStringCellValue().isEmpty()) {
+                    break;
+                }
+            }
+            x--;
+        }
         themeName = sheet.getRow(0).getCell(x).getStringCellValue();
 
         for (Theme t : themes)
